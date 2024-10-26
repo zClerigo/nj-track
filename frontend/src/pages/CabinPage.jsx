@@ -69,6 +69,10 @@ function CabinPage() {
               alt="Captured" 
               className="w-full h-auto rounded-lg mb-4" 
             />
+            <div className="mt-4 text-lg">
+              <p>Number of People: {counts.person}</p>
+              <p>Number of Chairs: {counts.chair}</p>
+            </div>
           </>
         ) : (
           <p>No image captured yet.</p>
