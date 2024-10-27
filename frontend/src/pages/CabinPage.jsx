@@ -24,7 +24,7 @@ function CabinPage() {
       .then((response) => {
         const processedImageBase64 = response.data.image;
         setCapturedImage(`data:image/jpeg;base64,${processedImageBase64}`);
-        setCounts(response.data.counts); // Set the counts from the API response
+        setCounts(response.data.counts);
       })
       .catch((error) => {
         console.error('Error uploading image:', error);
