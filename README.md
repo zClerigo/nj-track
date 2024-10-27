@@ -12,4 +12,4 @@ npm run dev (frontend directory)
 This app was made for Hack RU 2024
 
 
-![screenshot](test.png)
+![screenshot](media/test.png)
