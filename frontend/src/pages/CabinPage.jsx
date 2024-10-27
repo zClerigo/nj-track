@@ -7,6 +7,7 @@ function CabinPage() {
   const { cabinNumber } = useParams();
   const [capturedImage, setCapturedImage] = useState(null);
   const [counts, setCounts] = useState({ person: 0, chair: 0, people_sitting: 0 });
+  const [occupiedChairs, setOccupiedChairs] = useState([]);
 
   const handleCapture = (image) => {
     setCapturedImage(image);
@@ -25,6 +26,7 @@ function CabinPage() {
         const processedImageBase64 = response.data.image;
         setCapturedImage(`data:image/jpeg;base64,${processedImageBase64}`);
         setCounts(response.data.counts);
+        setOccupiedChairs(response.data.occupied_chairs);  // Set occupied chairs
       })
       .catch((error) => {
         console.error('Error uploading image:', error);
@@ -52,7 +54,8 @@ function CabinPage() {
         {Array.from({ length: counts.chair }).map((_, index) => (
           <div
             key={index}
-            className="bg-gray-700 w-20 h-20 rounded-lg flex items-center justify-center text-center"
+            className={`w-20 h-20 rounded-lg flex items-center justify-center text-center 
+              ${occupiedChairs.includes(index) ? 'bg-red-500' : 'bg-gray-700'}`}
           >
             {index + 1}
           </div>
@@ -72,7 +75,7 @@ function CabinPage() {
             <div className="mt-4 text-lg">
               <p>Number of People: {counts.person}</p>
               <p>Number of Chairs: {counts.chair}</p>
-              <p>People Sitting: {counts.people_sitting}</p> {/* Added People Sitting count */}
+              <p>People Sitting: {counts.people_sitting}</p>
             </div>
           </>
         ) : (
