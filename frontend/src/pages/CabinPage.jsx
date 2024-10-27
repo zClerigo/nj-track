@@ -49,7 +49,7 @@ function CabinPage() {
         <h1 className="text-3xl font-bold">Cabin {cabinNumber} Layout</h1>
       </div>
       <div className="grid grid-cols-4 gap-4 mt-6 mb-6">
-        {Array.from({ length: 4 }).map((_, index) => (
+        {Array.from({ length: counts.chair }).map((_, index) => (
           <div
             key={index}
             className="bg-gray-700 w-20 h-20 rounded-lg flex items-center justify-center text-center"
