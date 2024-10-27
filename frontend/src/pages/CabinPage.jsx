@@ -6,7 +6,7 @@ import api from "../api";
 function CabinPage() {
   const { cabinNumber } = useParams();
   const [capturedImage, setCapturedImage] = useState(null);
-  const [counts, setCounts] = useState({ person: 0, chair: 0 });
+  const [counts, setCounts] = useState({ person: 0, chair: 0, people_sitting: 0 });
 
   const handleCapture = (image) => {
     setCapturedImage(image);
@@ -72,6 +72,7 @@ function CabinPage() {
             <div className="mt-4 text-lg">
               <p>Number of People: {counts.person}</p>
               <p>Number of Chairs: {counts.chair}</p>
+              <p>People Sitting: {counts.people_sitting}</p> {/* Added People Sitting count */}
             </div>
           </>
         ) : (
