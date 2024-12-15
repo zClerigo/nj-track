@@ -5,7 +5,8 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
-import CabinPage from './pages/CabinPage';
+import CabinPage from './pages/CabinPage'; 
+import Cabins from './pages/Cabins'
 import './styles/tailwind.css';
 
 function Logout() {
@@ -26,10 +27,11 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <Home />
+              <Home/>
             </ProtectedRoute>
           }
-        />
+        /> 
+       <Route path="/:trainID" element={<Cabins />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />
