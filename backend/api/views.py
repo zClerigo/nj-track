@@ -116,7 +116,7 @@ class ImageUploadView(APIView):
 ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(ENV_PATH)
 
-TOKEN = os.getenv("NJ_TRANSIT_TOKEN")
+TOKEN = str(os.getenv("NJ_TRANSIT_TOKEN"))
 
 REFRESH_PAYLOAD = {
     "username": os.getenv("NJ_TRANSIT_USER"),
@@ -128,109 +128,107 @@ HEADERS = {
 }
 
 
-class ValidateTokenView(APIView):
+def refresh_token():
     """
-    API endpoint to validate the NJ Transit token.
+    Gets New NJ TRANSIT TOKEN, updates it to the .env file and returns the new token.
+    """
+    global TOKEN
+    try:
+        response = requests.post(
+            "https://testraildata.njtransit.com/api/TrainData/getToken",
+            data=REFRESH_PAYLOAD,
+            headers=HEADERS,
+        )
+        print(response.text)
+        response.raise_for_status()
+        data = response.json()
+        new_token = data.get("UserToken", False)
+        if new_token:
+            # Update the .env file with the new token
+            update_env_file(new_token)
+            TOKEN = new_token
+            return new_token
+        else:
+            errorMsg = data.get("errorMessage", "Failed to get new token")
+            raise Exception(errorMsg)
+    except requests.RequestException as e:
+        print(f"Error refreshing token: {e}")
+        raise Exception("Failed to refresh token")
+
+
+def update_env_file(new_token):
+    """
+    Updates the NJ_TRANSIT_TOKEN in the .env file.
+    """
+    try:
+        # Read the existing .env file
+        with open(ENV_PATH, "r") as file:
+            lines = file.readlines()
+
+        # Update the token in the .env file
+        with open(ENV_PATH, "w") as file:
+            for line in lines:
+                if line.startswith("NJ_TRANSIT_TOKEN"):
+                    file.write(f'NJ_TRANSIT_TOKEN = "{new_token}"\n')
+                else:
+                    file.write(line)
+
+        # Reload the environment variables
+        load_dotenv(ENV_PATH)
+        print("Token successfully updated in .env file")
+
+    except Exception as e:
+        print(f"Error updating .env file: {e}")
+        raise Exception("Failed to update .env file")
+
+
+class GetTrainDataView(APIView):
+    """
+    API endpoint to get the train data from the NJ Transit API.
     """
 
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         global TOKEN
         try:
-            response = requests.post(
-                "https://testraildata.njtransit.com/api/TrainData/isValidToken",
-                data={"token": TOKEN},
-                headers=HEADERS,
-            )
-            data = {"validToken": False}  # Default fallback value
-            if response.status_code == 204:
-                print("No content returned by the server.")
-                data = {"validToken": False}  # Default response for 204 status
-            else:
-                data = response.json()
-            print(data)
-            if (
-                data.get("errorMessage", False)
-                == "Daily usage limit:10. Your current daily usage: 11"
-            ):
-                is_valid = True
-            else:
-                is_valid = data.get("validToken", False)
-            return Response({"isValid": is_valid}, status=status.HTTP_200_OK)
-        except requests.RequestException as e:
-            print(f"Error validating token: {e}")
-            return Response(
-                {"error": "Failed to validate token"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-
-
-class RefreshTokenView(APIView):
-    """
-    API endpoint to refresh the NJ Transit token.
-    """
-
-    def post(self, request, *args, **kwargs):
-        global TOKEN
-        try:
-            response = requests.post(
-                "https://testraildata.njtransit.com/api/TrainData/getToken",
-                data=REFRESH_PAYLOAD,
-                headers=HEADERS,
-            )
-            print(response.text)
-            response.raise_for_status()
-            data = response.json()
-            new_token = data.get("UserToken")
-
-            if new_token:
-                # Update the .env file with the new token
-                self.update_env_file(new_token)
-                TOKEN = new_token
-                return Response({"token": new_token}, status=status.HTTP_200_OK)
-            else:
+            train_data = self.getTrainData(TOKEN, request) 
+            if train_data.get("errorMessage", False) == "Invalid token.":
+                TOKEN = refresh_token() 
+            train_data = self.getTrainData(TOKEN, request)     
+            if train_data.get("errorMessage", False) == "Invalid train_id." or train_data.get("TRAIN_ID", False) ==  None:  
                 return Response(
-                    {"error": "Failed to get new token"},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    {"error": "Invalid Train ID"},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
-
-        except requests.RequestException as e:
-            print(f"Error refreshing token: {e}")
+            if not TOKEN:
+                raise Exception("Failed to get new token.")
+            else:
+                return Response(train_data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"Error getting train data: {e}")
             return Response(
-                {"error": "Failed to refresh token"},
+                {"error": "Failed to get train data"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
     @staticmethod
-    def update_env_file(new_token):
+    def getTrainData(token, request):
         """
-        Updates the NJ_TRANSIT_TOKEN in the .env file.
+        Sends post request to getTrainStopList endpoint and returns formatted response
         """
-        try:
-            # Read the existing .env file
-            with open(ENV_PATH, "r") as file:
-                lines = file.readlines()
-
-            # Update the token in the .env file
-            with open(ENV_PATH, "w") as file:
-                for line in lines:
-                    if line.startswith("NJ_TRANSIT_TOKEN"):
-                        file.write(f'NJ_TRANSIT_TOKEN = "{new_token}"\n')
-                    else:
-                        file.write(line)
-
-            # Reload the environment variables
-            load_dotenv(ENV_PATH)
-            print("Token successfully updated in .env file")
-
+        try: 
+            train_id = request.query_params.get(
+                "train_id"
+            )  # Extract train_id from the request   
+            train_id = str(train_id)  # Convert train_id to string  
+            response = requests.post(
+                "https://testraildata.njtransit.com/api/TrainData/getTrainStopList",
+                data={"token": token, "train": train_id},
+                headers=HEADERS,
+            ) 
+            if response.status_code == 204:
+                data = {"errorMessage": "Invalid train_id."}
+                return data
+            data = response.json()
+            return data
         except Exception as e:
-            print(f"Error updating .env file: {e}")
-
-
-class GetTokenView(APIView):
-    """
-    API endpoint to get the current NJ Transit token.
-    """
-
-    def get(self, request, *args, **kwargs):
-        token = os.getenv("NJ_TRANSIT_TOKEN")
-        return Response({"token": token}, status=status.HTTP_200_OK)
+            raise Exception(f"Failed to get train data: {e}")
