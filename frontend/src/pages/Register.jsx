@@ -1,9 +1,9 @@
-import Form from "../components/Form"
+import RegisterForm from "../components/Forms/RegisterForm"
 
 function Register() {
     return ( 
     <div className="min-h-screen bg-transit_black text-normal_text p-6 flex justify-center align-center">
-    <Form route="/api/user/register/" method="register"/> 
+    <RegisterForm></RegisterForm> 
     </div>)
 }
 

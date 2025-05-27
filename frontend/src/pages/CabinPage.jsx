@@ -1,40 +1,77 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import WebcamCapture from "../components/WebcamCapture";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import CabinLayout from "../components/CabinLayout/CabinLayout"; 
+import VideoDataDisplay from "../components/VideoDataDisplay/VideoDataDisplay";
+import Navbar from "../components/NavBar";
 import api from "../api";
 
 function CabinPage() {
+  //How this is structured is absolutely terrible, but im afraid to touch it
+  const [trainData, setTrainData] = useState(
+    JSON.parse(localStorage.getItem("trainData")),
+  );
   const { cabinNumber } = useParams();
   const [capturedImage, setCapturedImage] = useState(null);
-  const [counts, setCounts] = useState({ person: 0, chair: 0, people_sitting: 0 });
+  const [counts, setCounts] = useState({
+    person: 0,
+    chair: 0,
+    people_sitting: 0,
+  });
   const [occupiedChairs, setOccupiedChairs] = useState([]);
+  //Temporary variable to make seat color change to green
+  const [clickedChairs, setClickedChairs] = useState({});
 
   const handleCapture = (image) => {
     setCapturedImage(image);
 
-    const file = dataURLtoFile(image, 'captured_image.jpg');
+    const file = dataURLtoFile(image, "captured_image.jpg");
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append("image", file);
 
     api
-      .post('/api/upload_image/', formData, {
+      .post("/api/upload_image/", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((response) => {
         const processedImageBase64 = response.data.image;
         setCapturedImage(`data:image/jpeg;base64,${processedImageBase64}`);
         setCounts(response.data.counts);
-        setOccupiedChairs(response.data.occupied_chairs);  // Set occupied chairs
+        setOccupiedChairs(response.data.occupied_chairs); // Set occupied chairs
       })
       .catch((error) => {
-        console.error('Error uploading image:', error);
+        console.error("Error uploading image:", error);
       });
   };
 
+  // test handler for image upload (only for testing purposes)
+  /*const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      api
+        .post("/api/upload_image/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          const processedImageBase64 = response.data.image;
+          setCapturedImage(`data:image/jpeg;base64,${processedImageBase64}`);
+          setCounts(response.data.counts);
+          setOccupiedChairs(response.data.occupied_chairs); // Set occupied chairs
+        })
+        .catch((error) => {
+          console.error("Error uploading image:", error);
+        });
+    }
+  };*/
+
   const dataURLtoFile = (dataUrl, filename) => {
-    const arr = dataUrl.split(',');
+    const arr = dataUrl.split(",");
     const mime = arr[0].match(/:(.*?);/)[1];
     const bstr = atob(arr[1]);
     let n = bstr.length;
@@ -45,43 +82,53 @@ function CabinPage() {
     return new File([u8arr], filename, { type: mime });
   };
 
+  //Temp functions to change chairs to green
+  const handleClick = (index) => {
+    if (occupiedChairs.includes(index)) {
+      // Toggle clicked state for the specific chair
+      setClickedChairs((prev) => ({
+        ...prev,
+        [index]: !prev[index], // Toggle the clicked state for this chair
+      }));
+    }
+  };
+
+  const getColor = (index) => {
+    if (occupiedChairs.includes(index)) {
+      // If the chair is occupied and clicked, it turns green
+      return clickedChairs[index] ? "bg-green-500" : "bg-red-500";
+    } else {
+      // Default color is gray
+      return "bg-gray-700";
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6 flex flex-col items-center justify-center">
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-bold">Cabin {cabinNumber} Layout</h1>
-      </div>
-      <div className="grid grid-cols-4 gap-4 mt-6 mb-6">
-        {Array.from({ length: counts.chair }).map((_, index) => (
-          <div
-            key={index}
-            className={`w-20 h-20 rounded-lg flex items-center justify-center text-center 
-              ${occupiedChairs.includes(index) ? 'bg-red-500' : 'bg-gray-700'}`}
-          >
-            {index + 1}
-          </div>
-        ))}
-      </div>
-      <h2 className="text-3xl font-bold mb-6">Live Video</h2>
-      <WebcamCapture onCapture={handleCapture} className="w-80 h-auto" />
-      <div className="bg-gray-800 p-4 rounded-lg mt-6">
-        <h2 className="text-2xl font-bold mb-4">Captured Image</h2>
-        {capturedImage ? (
-          <>
-            <img 
-              src={capturedImage} 
-              alt="Captured" 
-              className="w-full h-auto rounded-lg mb-4" 
-            />
-            <div className="mt-4 text-lg">
-              <p>Number of People: {counts.person}</p>
-              <p>Number of Chairs: {counts.chair}</p>
-              <p>People Sitting: {counts.people_sitting}</p>
-            </div>
-          </>
-        ) : (
-          <p>No image captured yet.</p>
-        )}
-      </div>
+    <div className="min-h-screen bg-gray-900 text-white">
+      <Navbar route={"/cabins"} />
+      <div className="w-full p-6 gap-4 md:gap-8 flex sm:flex-nowrap flex-wrap justify-center items center top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] absolute">
+        <CabinLayout
+          cabinNumber={cabinNumber}
+          counts={counts}
+          occupiedChairs={occupiedChairs}
+          clickedChairs={clickedChairs}
+          handleClick={handleClick}
+          getColor={getColor}
+        /> 
+        {/* */}
+        <VideoDataDisplay 
+        capturedImage={capturedImage} 
+        counts={counts} 
+        handleCapture={handleCapture} 
+        ></VideoDataDisplay>
+      </div> 
+      {/*Debugging/testing input for machine learning stuff */}
+              {/* <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileUpload}
+                className="mb-2 w-12 text-transit_white bg-transit_blue rounded-md p-2"
+              ></input> */}
     </div>
   );
 }

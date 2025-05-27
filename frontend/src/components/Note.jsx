@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 import "../styles/Note.css"
 
 function Note({ note, onDelete }) {
@@ -14,6 +14,15 @@ function Note({ note, onDelete }) {
       </button>
     </div>
   );
-}
+} 
+Note.propTypes = {
+  note: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    created_at: PropTypes.string.isRequired,
+  }).isRequired,
+  onDelete: PropTypes.func.isRequired,
+};
 
 export default Note
