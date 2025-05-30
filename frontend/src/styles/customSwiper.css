@@ -1,0 +1,39 @@
+/* Navigation Buttons */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #4d96db; /* Transit-blue color */
+  opacity: 0.8; /* Slight transparency */
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #04529C; /* Lighter blue on hover */
+  opacity: 1; /* Full opacity on hover */
+}
+
+/* Pagination Bullets */
+.swiper-pagination-bullet {
+  background-color: #4d96db; /* Transit-blue color */
+  width: 12px;
+  height: 12px;
+  opacity: 0.7;
+  transition: background-color 0.3s ease, opacity 0.3s ease; 
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #04529C; /* Lighter blue for active bullet */
+  opacity: 1; /* Full opacity for active bullet */
+} 
+
+.swiper-pagination {
+    position: absolute !important;
+    top: 10px !important; /* Adjust top position */ 
+    right: 10px !important; /* Adjust right position */ 
+    width:auto !important; /* Allow width to adjust based on content */  
+    left:auto !important; /* Remove left alignment */ 
+    bottom: auto !important; /* Remove bottom alignment */
+    display: flex;
+    flex-direction: column; /* Make pagination vertical */
+    gap: 8px; /* Add spacing between bullets */
+  }
