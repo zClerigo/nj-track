@@ -66,6 +66,9 @@ export default {
         'elevation-medium-light': '0 3px 4px hsl(300deg 3% 60% / 0.3)',
         'elevation-high-light': '0 5px 6px hsl(300deg 3% 60% / 0.3)',
       },
+      screens: {
+        xs: "480px",
+      },
     },
   },
   plugins: [  

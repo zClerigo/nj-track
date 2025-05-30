@@ -2,11 +2,11 @@ import PropTypes from "prop-types";
 
 const CabinLayout = ({cabinNumber ,counts,  handleClick, getColor }) => {
   return (
-    <div className="sm:w-2/6 w-full bg-transit_white p-4 rounded-md flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold text-center text-highlight_text">
+    <div className="max-xs:flex-grow xs:w-1/2 md:2/6 w-full bg-transit_white p-4 rounded-md flex flex-col max-xs:justify-self-stretch items-center justify-start gap-4">
+      <h1 className="lg:text-3xl text-xl md:text-2xl font-bold text-center text-highlight_text">
         Cabin {cabinNumber} Layout
       </h1>
-      <div className="grid grid-cols-4 gap-4 mt-6 mb-6">
+      <div className="justify-self-stretch flex-1 grid grid-cols-4 gap-4 bg-gray-300 drop-shadow-elevation-low-light rounded-lg w-full">
         {Array.from({ length: counts.chair }).map((_, index) => (
           <div
             onClick={() => handleClick(index)}

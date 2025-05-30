@@ -106,7 +106,7 @@ function CabinPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <Navbar route={"/cabins"} />
-      <div className="w-full p-6 gap-4 md:gap-8 flex sm:flex-nowrap flex-wrap justify-center items center top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] absolute">
+      <div className="w-full p-6 gap-4 md:gap-8 flex xs:flex-nowrap flex-wrap max-xs:flex-col max-xs:justify-start justify-center max-xs:h-[85%] md:mt-[5%] max-sm:mt-[-12%] sm:items-stretch top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] absolute">
         <CabinLayout
           cabinNumber={cabinNumber}
           counts={counts}

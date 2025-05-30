@@ -61,7 +61,7 @@ function Cabins() {
   return (
     <div className="min-h-screen bg-transit_black text-white">
       <Navbar route="/" />
-      <div className="absolute flex flex-col gap-3 justify-content min-w-72 sm:w-4/5 bg-transit_white p-4 rounded-md top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">
+      <div className="absolute flex flex-col gap-3 justify-content min-w-72 sm:w-4/5 bg-transit_white p-4 rounded-md top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] max-sm:mt-[-10%]">
         <h1 className="text-3xl text-highlight_text font-bold text-center">
           Cabins Displayed Here
         </h1>

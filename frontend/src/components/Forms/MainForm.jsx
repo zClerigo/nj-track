@@ -34,7 +34,7 @@ function MainForm({ title, fields, onSubmit, buttonLabel, redirectLink, redirect
   return (
     <form
       onSubmit={handleSubmit}
-      className="form-container absolute w-72 sm:w-1/2 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 m-auto bg-transit_white text-transit_black shadow-elevation-high-dark rounded-lg"
+      className="form-container absolute w-72 flex-grow sm:w-1/2 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 m-auto bg-transit_white text-transit_black shadow-elevation-high-dark rounded-lg"
     >
       <img
         src={logo}

@@ -76,14 +76,14 @@ const WebcamCapture = forwardRef( function WebcamCapture({ onCapture, onWebcamRe
             });
           }
         }}
-        style={{ width: "85%", height: "auto" }}
-        className="rounded-lg"
+        style={{ height: "auto" }} //play around this width 
+        className="rounded-lg sm:w-[85%] w-2/5 min-w-[150px] xs:w-2/3 max-sm:max-w-[300px]"
       />
 
       <button
         onClick={handleCapture}
         disabled={!isStreaming}
-        className={`mt-4 px-14 py-4 text-lg text-white bg-gradient-to-r from-highlight_text via-transit_blue to-blue-600 rounded-lg shadow-lg transition-all duration-500 
+        className={`mt-4 px-12 py-4 text-base lg:text-xl lg:px-14  text-white bg-gradient-to-r from-highlight_text via-transit_blue to-blue-600 rounded-lg shadow-lg transition-all duration-500 
     hover:bg-right bg-[40%_100%] bg-[length:200%_100%] ${
       !isStreaming ? "opacity-50 cursor-not-allowed" : "opacity-100"
     }`}
