@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 const CabinLayout = ({cabinNumber ,counts,  handleClick, getColor }) => {
   return (
-    <div className="max-xs:flex-grow xs:w-1/2 md:2/6 w-full bg-transit_white p-4 rounded-md flex flex-col max-xs:justify-self-stretch items-center justify-start gap-4">
+    <div className="max-xs:flex-grow xs:w-1/2 w-full bg-transit_white p-4 rounded-md flex flex-col max-xs:justify-self-stretch items-center justify-start gap-4">
       <h1 className="lg:text-3xl text-xl md:text-2xl font-bold text-center text-highlight_text">
         Cabin {cabinNumber} Layout
       </h1>

@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 const LiveVideoData = forwardRef(
   function LiveVideoData({handleCapture, onWebcamReady}, ref) { 
     return (
-      <div className="flex flex-col items-center justify-center gap-4 md:flex-1">
+      <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-1">
         <h2 className="self-start md:text-2xl text-xl font-bold text-highlight_text">
           Live Video
         </h2>

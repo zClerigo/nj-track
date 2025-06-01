@@ -35,7 +35,7 @@ function VideoDataDisplay({ capturedImage = null, counts, handleCapture }) {
   return (
     <>
       {isDesktop ? (
-        <div className="md:flex xs:w-4/6 gap-2 bg-transit_white p-4 rounded-md hidden items-start justify-center flex-wrap">
+        <div className="md:flex xs:w-1/2  gap-2 bg-transit_white p-4 rounded-md hidden items-center justify-start flex-col">
           <LiveVideoData
             ref={webcamRef}
             handleCapture={handleCapture}
@@ -47,20 +47,6 @@ function VideoDataDisplay({ capturedImage = null, counts, handleCapture }) {
             placeHolderWidth={webcamWidth}
             placeholderHeight={webcamHeight}
           ></CapturedImageData>
-          <div className="bg-gray-800 w-full p-4 rounded-lg hidden md:block">
-            <h2 className="text-2xl font-bold mb-4 text-highlight_text">
-              Data From Captured Image
-            </h2>
-            {capturedImage ? (
-              <div className="sm:mt-4 text-sm md:text-lg">
-                <p>Number of People: {counts.person}</p>
-                <p>Number of Chairs: {counts.chair}</p>
-                <p>People Sitting: {counts.people_sitting}</p>
-              </div>
-            ) : (
-              <p>No image captured yet.</p>
-            )}
-          </div>
         </div>
       ) : (
         <div className="flex justify-center max-xs:justify-self-end md:hidden w-full xs:w-3/6   bg-transit_white rounded-md">
@@ -103,4 +89,5 @@ VideoDataDisplay.propTypes = {
   }).isRequired,
   handleCapture: PropTypes.func.isRequired,
 };
+
 export default VideoDataDisplay;
