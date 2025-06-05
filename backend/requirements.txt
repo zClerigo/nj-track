@@ -8,3 +8,10 @@ pytz
 sqlparse
 psycopg2-binary
 python-dotenv
+requests
+Pillow
+roboflow
+torch
+matplotlib
+numpy
+opencv-python
