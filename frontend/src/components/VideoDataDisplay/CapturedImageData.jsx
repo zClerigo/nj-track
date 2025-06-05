@@ -9,8 +9,8 @@ function CapturedImageData({
   capturedImage = null,
   counts,
   placeholderHeight,
-  placeHolderWidth,
-}) { 
+  placeholderWidth,
+}) {
   const tabHeight = 48; //height of the tab to show/hide data
   const [open, setOpen] = useState(false);
   const toggleOpen = () => {
@@ -22,23 +22,28 @@ function CapturedImageData({
       <h2 className="self-start md:text-2xl text-xl font-bold text-highlight_text">
         Captured Image
       </h2>
-      <div className="relative flex-col flex items-center w-full" 
-      style = {{
-         width: placeHolderWidth,
-        minHeight: placeholderHeight + tabHeight,
-      }}
+      <div
+        className="relative flex-col flex items-center w-full"
+        style={{
+          width: placeholderWidth,
+          minHeight: placeholderHeight + tabHeight,
+        }}
       >
         {capturedImage ? (
           <img
             src={capturedImage}
             alt="Captured"
             className={`${open ? "rounded-lg" : "rounded-t-lg"} w-full h-auto`}
+            style={{
+              maxHeight: `${placeholderHeight}px`,
+              maxWidth: `${placeholderWidth}px`,
+            }}
           />
         ) : (
           <div
             style={{
               height: `${placeholderHeight}px`,
-              width: `${placeHolderWidth}px`,
+              width: `${placeholderWidth}px`,
             }}
             className="overflow-hidden bg-transit_black rounded-t-lg p-2 flex justify-center items-center"
           >
@@ -57,10 +62,12 @@ function CapturedImageData({
         <div
           className={`absolute w-full z-10
             transition-all duration-500 ease-in-out`}
-          style={{  
-           top: open ? 0 : `${placeholderHeight}px`,
-            height: open ? `${placeholderHeight + tabHeight}px` : `${tabHeight}px`,
-            maxWidth: `${placeHolderWidth}px`, 
+          style={{
+            top: open ? 0 : `${placeholderHeight}px`,
+            height: open
+              ? `${placeholderHeight + tabHeight}px`
+              : `${tabHeight}px`,
+            maxWidth: `${placeholderWidth}px`,
           }}
         >
           <button
@@ -83,8 +90,8 @@ function CapturedImageData({
           <div
             className={`bg-gray-800 px-4 pb-4 rounded-b-lg text-transit_white overflow-hidden transition-all duration-900 ease-in-out 
             ${open ? "opacity-100" : "opacity-0 pointer-events-none"}
-            `} 
-             style={{
+            `}
+            style={{
               height: open ? `${placeholderHeight}px` : 0,
               paddingTop: open ? "1rem" : 0,
             }}
@@ -111,7 +118,7 @@ CapturedImageData.propTypes = {
     people_sitting: PropTypes.number.isRequired,
   }).isRequired,
   placeholderHeight: PropTypes.number,
-  placeHolderWidth: PropTypes.number,
+  placeholderWidth: PropTypes.number,
 };
 
 export default CapturedImageData;

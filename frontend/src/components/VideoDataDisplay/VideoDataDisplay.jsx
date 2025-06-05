@@ -44,12 +44,12 @@ function VideoDataDisplay({ capturedImage = null, counts, handleCapture }) {
           <CapturedImageData
             counts={counts}
             capturedImage={capturedImage}
-            placeHolderWidth={webcamWidth}
+            placeholderWidth={webcamWidth}
             placeholderHeight={webcamHeight}
           ></CapturedImageData>
         </div>
       ) : (
-        <div className="flex justify-center max-xs:justify-self-end md:hidden w-full xs:w-3/6   bg-transit_white rounded-md">
+        <div className="flex justify-center max-md:justify-self-end md:hidden w-full md:w-3/6   bg-transit_white rounded-md">
           <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={10}
@@ -69,7 +69,7 @@ function VideoDataDisplay({ capturedImage = null, counts, handleCapture }) {
               <CapturedImageData
                 counts={counts}
                 capturedImage={capturedImage}
-                placeHolderWidth={webcamWidth}
+                placeholderWidth={webcamWidth}
                 placeholderHeight={webcamHeight}
               ></CapturedImageData>
             </SwiperSlide>

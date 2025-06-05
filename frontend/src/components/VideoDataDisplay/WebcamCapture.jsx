@@ -65,7 +65,7 @@ const WebcamCapture = forwardRef( function WebcamCapture({ onCapture, onWebcamRe
   };
 
   return (
-    <div className="flex flex-col items-center sm:w-[70%] lg:w-[60%]  w-2/5 min-w-[200px] xs:w-2/3 max-w-[300px]">
+    <div className="flex flex-col items-center lg:w-[50%] w-[max(40%,200px)] max-w-[300px]">
       <video
         ref={videoRef}  
         onLoadedMetadata={() => {
