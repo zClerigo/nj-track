@@ -1,0 +1,25 @@
+# backend/.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environment
+venv/
+env/
+
+# Django
+*.sqlite3
+db.sqlite3
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
