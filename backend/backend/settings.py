@@ -47,7 +47,7 @@ SIMPLE_JWT = {
 }
 
 # Application definition
-
+#Not sure if object_detection is needed, so leaving it commented out for now because I keep getting ModuleNotFoundError
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -56,9 +56,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "api",
-    "object_detection",
     "rest_framework",
-    "corsheaders",
+    "corsheaders", 
+    #"object_detection",
 ]
 
 MIDDLEWARE = [
@@ -95,7 +95,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+print("Connecting to database...") 
+print("DB_NAME:", os.getenv("DB_NAME"))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
